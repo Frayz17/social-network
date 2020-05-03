@@ -1,7 +1,7 @@
 import React from "react";
 import Users from "./Users";
 import Preloader from "components/common/Preloader";
-
+import { compose } from "redux";
 import { connect } from "react-redux";
 import {
   follow,
@@ -10,36 +10,19 @@ import {
   setCurrentPage,
   setTotalUsersCount,
   toggleIsFetching,
+  getUsers,
+  followUser,
+  unFollowUser,
 } from "store/usersReducer";
-import { usersApi } from "api/api";
+import WithAuthRedirect from "hoc/WithAuthRedirect";
 
 class UsersContainer extends React.Component {
   componentDidMount() {
-    this.props.toggleIsFetching(true);
-
-    usersApi
-      .getUsers(this.props.currentPage, this.props.pageSize)
-      .then((data) => {
-        this.props.toggleIsFetching(false);
-
-        const result = data.items;
-        const totalUsersCount = data.totalCount;
-
-        this.props.setUsers(result);
-        this.props.setTotalUsersCount(totalUsersCount);
-      });
+    this.props.getUsers(this.props.currentPage, this.props.pageSize);
   }
 
   onPageChanged = (pageNumber) => {
-    this.props.toggleIsFetching(true);
-    this.props.setCurrentPage(pageNumber);
-
-    usersApi.getUsers(pageNumber, this.props.pageSize).then((data) => {
-      this.props.toggleIsFetching(false);
-      const result = data.items;
-
-      this.props.setUsers(result);
-    });
+    this.props.getUsers(pageNumber, this.props.pageSize);
   };
 
   render() {
@@ -56,6 +39,10 @@ class UsersContainer extends React.Component {
             users={this.props.users}
             follow={this.props.follow}
             unFollow={this.props.unFollow}
+            followingInProgress={this.props.followingInProgress}
+            getUsers={this.props.getUsers}
+            followUser={this.props.followUser}
+            unFollowUser={this.props.unFollowUser}
           />
         )}
       </>
@@ -70,6 +57,7 @@ const mapStateToProps = (state) => {
     totalUsersCount: state.usersPage.totalUsersCount,
     currentPage: state.usersPage.currentPage,
     isFetching: state.usersPage.isFetching,
+    followingInProgress: state.usersPage.followingInProgress,
   };
 };
 
@@ -80,9 +68,15 @@ const mapDispatchToProps = {
   setTotalUsersCount,
   setCurrentPage,
   toggleIsFetching,
+  getUsers,
+  followUser,
+  unFollowUser,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+export default compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  WithAuthRedirect
 )(UsersContainer);

@@ -1,18 +1,11 @@
 import React from "react";
 import Header from "./Header";
 import { connect } from "react-redux";
-import { authApi } from "api/api";
-import { setAuthUserData } from "store/authReducer";
+import { setAuthUserData, getMyAccountInfo } from "store/authReducer";
 
 class HeaderContainer extends React.Component {
   componentDidMount() {
-    // this.props.toggleIsFetching(true);
-    authApi.getMyAcountInfo().then((data) => {
-      if (data.resultCode === 0) {
-        const userData = data.data;
-        this.props.setAuthUserData(userData);
-      }
-    });
+    this.props.getMyAccountInfo();
   }
 
   render() {
@@ -29,6 +22,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   setAuthUserData,
+  getMyAccountInfo,
 };
 
 export default connect(

@@ -1,6 +1,5 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { followApi } from "api/api";
 import styles from "./users.module.css";
 import userImg from "assets/images/user.png";
 
@@ -44,25 +43,15 @@ const Users = (props) => {
             <div>
               {user.followed === false ? (
                 <button
-                  onClick={() => {
-                    followApi.follow(user.id).then((data) => {
-                      if (data.resultCode === 0) {
-                        props.follow(user.id);
-                      }
-                    });
-                  }}
+                  disabled={props.followingInProgress.includes(user.id)}
+                  onClick={() => props.followUser(user.id)}
                 >
                   follow
                 </button>
               ) : (
                 <button
-                  onClick={() => {
-                    followApi.unFollow(user.id).then((data) => {
-                      if (data.resultCode === 0) {
-                        props.unFollow(user.id);
-                      }
-                    });
-                  }}
+                  disabled={props.followingInProgress.includes(user.id)}
+                  onClick={() => props.unFollowUser(user.id)}
                 >
                   unfollow
                 </button>

@@ -1,7 +1,7 @@
-import React from 'react';
-import s from './Dialogs.module.css';
-import DialogItem from './DialogItem/DialogItem';
-import Message from './Message/Message';
+import React from "react";
+import s from "./Dialogs.module.css";
+import DialogItem from "./DialogItem/DialogItem";
+import Message from "./Message/Message";
 
 const Dialogs = ({
   addMessage,
@@ -9,6 +9,7 @@ const Dialogs = ({
   newMessageText,
   messages,
   dialogs,
+  isAuth,
 }) => {
   const dialogsElements = dialogs.map((d) => (
     <DialogItem key={d.id} name={d.name} id={d.id} />

@@ -41,7 +41,7 @@ export const profileApi = {
 };
 
 export const authApi = {
-  getMyAcountInfo: () => {
+  getMyAccountInfo: () => {
     return configuredAxios.get(`auth/me`).then((response) => {
       return response.data;
     });

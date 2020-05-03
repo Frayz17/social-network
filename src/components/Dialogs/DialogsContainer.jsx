@@ -4,8 +4,11 @@ import {
   updateNewMessageTextCreator,
 } from "store/dialogsReducer";
 import { connect } from "react-redux";
+import { compose } from "redux";
+import WithAuthRedirect from "hoc/WithAuthRedirect";
+import { withRouter } from "react-router-dom";
 
-const mapToProps = (state) => {
+const mapStateToProps = (state) => {
   return {
     dialogs: state.dialogsPage.dialogs,
     messages: state.dialogsPage.messages,
@@ -13,7 +16,7 @@ const mapToProps = (state) => {
   };
 };
 
-const dispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     addMessage: () => dispatch(addMessageCreator()),
     updateNewMessageText: (text) => {
@@ -22,9 +25,11 @@ const dispatchToProps = (dispatch) => {
   };
 };
 
-const DialogsContainer = connect(
-  mapToProps,
-  dispatchToProps
+export default compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  ),
+  withRouter,
+  WithAuthRedirect
 )(Dialogs);
-
-export default DialogsContainer;
